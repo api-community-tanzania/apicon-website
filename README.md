@@ -1,36 +1,162 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# APICon Tanzania 2026
+
+Official website for **APICon Tanzania 2026** — a community-driven conference focused on API development, API security, DevSecOps, AI agents, Model Context Protocol (MCP), and the API Marketplace & Innovation Hub.
+
+**Live site:** [https://apicon.or.tz](https://apicon.or.tz)
+
+**Event date:** Saturday, 21 November 2026  
+**Location:** Dar es Salaam, Tanzania
+
+---
+
+## About
+
+APICon Tanzania brings together developers, cybersecurity professionals, startups, technology companies, students, and API providers to learn, showcase, discover, and secure the APIs powering modern digital systems.
+
+This repository contains the source code for the public conference website, including the home page and the team page.
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+| --- | --- |
+| Framework | [Next.js 16](https://nextjs.org) (App Router) |
+| UI | React 19 |
+| Language | TypeScript |
+| Styling | Legacy CSS (`public/css/style.css`), Bootstrap 5, Animate.css, Font Awesome, Lineicons |
+| Tooling | ESLint, React Compiler, Turbopack (dev) |
+
+The site was migrated from a static HTML site to Next.js while preserving the original design and interactions.
+
+---
+
+## Pages
+
+| Route | Description |
+| --- | --- |
+| `/` | Home — conference overview, topics, marketplace, partners, FAQ, and contact |
+| `/team` | Team — organizers and community leads behind APICon Tanzania |
+
+Legacy static URLs are redirected automatically:
+
+- `/index.html` → `/`
+- `/team.html` → `/team`
+
+---
+
+## Project Structure
+
+```text
+apicon-website/
+├── app/
+│   ├── layout.tsx          # Root layout, metadata, global assets
+│   ├── page.tsx            # Home page
+│   ├── globals.css         # Minimal global overrides
+│   └── team/
+│       └── page.tsx        # Team page
+├── components/
+│   ├── legacy-page.tsx     # Renders migrated HTML markup
+│   ├── structured-data.tsx # JSON-LD schema injection
+│   └── use-legacy-interactions.ts  # Theme, nav, FAQ, scroll, and client routing
+├── lib/
+│   ├── legacy-content.ts   # Home and team HTML content
+│   └── structured-data.ts  # SEO structured data
+├── public/
+│   ├── assets/images/      # Logos, hero images, team photos, OG image
+│   ├── css/style.css       # Main site stylesheet
+│   ├── robots.txt
+│   ├── sitemap.xml
+│   └── llms.txt
+└── next.config.ts          # Redirects and Next.js configuration
+```
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+
+- npm
+
+### Installation
+
+```bash
+git clone <repository-url>
+cd apicon-website
+npm install
+```
+
+### Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+### Lint
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Features
 
-## Deploy on Vercel
+- **SEO-ready** — metadata, Open Graph, Twitter cards, canonical URLs, and JSON-LD structured data
+- **Dark / light theme** — persisted in `localStorage`, applied before first paint
+- **Client-side navigation** — internal links use the Next.js App Router (no full page reloads)
+- **Accessible interactions** — mobile nav, FAQ accordion, partner tabs, scroll progress, and back-to-top
+- **Static prerendering** — home and team pages are statically generated at build time
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+
+This project is designed to deploy on [Vercel](https://vercel.com) or any platform that supports Next.js.
+
+Recommended steps:
+
+1. Connect the repository to your hosting provider
+2. Set the production domain to `apicon.or.tz`
+3. Deploy from the `main` branch
+
+No environment variables are required for the public site.
+
+---
+
+## Contact
+
+| Purpose | Email |
+| --- | --- |
+| General support | [support@apicon.or.tz](mailto:support@apicon.or.tz) |
+| Partnerships & exhibitors | [partnerships@apicon.or.tz](mailto:partnerships@apicon.or.tz) |
+| Speaking | [speakers@apicon.or.tz](mailto:speakers@apicon.or.tz) |
+
+**Phone:** +255 745 289 098
+
+---
+
+## Community
+
+Built by the **APICon Tanzania Community**.
+
+- [LinkedIn](https://www.linkedin.com/company/apicontz)
+- [Instagram](https://www.instagram.com/apicontz)
+- [X](https://www.x.com/apicontz)
+
+---
+
+## License
+
+© 2026 APICon Tanzania. All rights reserved.
