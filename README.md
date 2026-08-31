@@ -141,11 +141,13 @@ In **hPanel → Websites → Node.js Web App**, use:
 | --- | --- |
 | Node.js version | **20.x** |
 | Install command | `npm install` |
-| Build command | `npm run build` |
+| Build command | `npm run build` (uses Webpack — required on Hostinger) |
 | Start command | `npm run start` |
 | App port | Use the port Hostinger assigns (usually via `PORT`) |
 
 Push these changes, then redeploy. You may see a warning about `@next/swc-linux-x64-gnu` and GLIBC — that is expected; Next.js falls back to WASM and the build should continue.
+
+The build script uses `next build --webpack` because Hostinger’s older Linux cannot run Turbopack (which requires native bindings).
 
 If the build still fails on Hostinger, build locally and upload the output instead:
 
