@@ -9,7 +9,7 @@ type LegacyPageProps = {
 };
 
 export function LegacyPage({ markup, bodyClassName }: LegacyPageProps) {
-  useLegacyInteractions();
+  useLegacyInteractions(markup);
 
   useEffect(() => {
     if (!bodyClassName) return;

@@ -1,10 +1,15 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const THEME_KEY = "apicon-theme";
 
 type ThemeName = "light" | "dark";
+
+function prefersReducedMotion(): boolean {
+  return matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
 
 function applyTheme(theme: ThemeName): void {
   const root = document.documentElement;
@@ -17,7 +22,9 @@ function applyTheme(theme: ThemeName): void {
   });
 }
 
-export function useLegacyInteractions(): void {
+export function useLegacyInteractions(markup: string): void {
+  const router = useRouter();
+
   useEffect(() => {
     const cleanups: Array<() => void> = [];
     const listen = <K extends keyof WindowEventMap>(
@@ -58,17 +65,21 @@ export function useLegacyInteractions(): void {
         return;
       }
 
-      const anchor = clicked.closest<HTMLAnchorElement>('a[href^="#"]');
+      const anchor = clicked.closest<HTMLAnchorElement>("a[href]");
       if (anchor) {
-        const selector = anchor.getAttribute("href");
-        if (selector && selector.length > 1) {
-          const target = document.querySelector(selector);
-          if (target) {
-            event.preventDefault();
-            target.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
-            document.getElementById("mainNavbar")?.classList.remove("show");
-          }
+        const internal = internalTarget(anchor, event);
+        if (!internal) return;
+
+        if (internal.pathname === location.pathname) {
+          const target = internal.hash.length > 1 ? document.querySelector(internal.hash) : null;
+          if (!target) return;
+          event.preventDefault();
+          target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+        } else {
+          event.preventDefault();
+          router.push(`${internal.pathname}${internal.search}${internal.hash}`);
         }
+        document.getElementById("mainNavbar")?.classList.remove("show");
         return;
       }
 
@@ -182,8 +193,33 @@ export function useLegacyInteractions(): void {
     setupTeamCarousel(cleanups);
     setupPointerEffects(cleanups);
 
+    new Set(
+      Array.from(document.querySelectorAll<HTMLAnchorElement>("a[href]"))
+        .map((link) => internalTarget(link)?.pathname)
+        .filter((pathname): pathname is string => Boolean(pathname) && pathname !== location.pathname),
+    ).forEach((pathname) => router.prefetch(pathname));
+
     return () => cleanups.reverse().forEach((cleanup) => cleanup());
-  }, []);
+  }, [markup, router]);
+}
+
+/**
+ * Resolves an anchor from the injected legacy markup to a same-origin destination
+ * the App Router can handle, or null when the browser should own the navigation
+ * (external hosts, mailto/tel, downloads, new tabs, modifier-clicks).
+ */
+function internalTarget(anchor: HTMLAnchorElement, event?: MouseEvent): URL | null {
+  if (event && (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return null;
+  if (anchor.hasAttribute("download")) return null;
+  if (anchor.target && anchor.target !== "_self") return null;
+
+  let url: URL;
+  try {
+    url = new URL(anchor.href, location.href);
+  } catch {
+    return null;
+  }
+  return url.origin === location.origin ? url : null;
 }
 
 function animateCounter(counter: HTMLElement): void {

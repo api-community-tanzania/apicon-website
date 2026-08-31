@@ -34,8 +34,10 @@ export const viewport: Viewport = {
 const themeBootstrap = `try{if(localStorage.getItem('apicon-theme')==='dark'){document.documentElement.setAttribute('data-theme','dark')}}catch(e){}`;
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  // Bootstrap's `:root { scroll-behavior: smooth }` outranks the legacy `html { scroll-behavior: auto }`,
+  // so the router needs `data-scroll-behavior` to suspend it while restoring scroll on route transitions.
   return (
-    <html lang="en" dir="ltr" suppressHydrationWarning>
+    <html lang="en" dir="ltr" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
