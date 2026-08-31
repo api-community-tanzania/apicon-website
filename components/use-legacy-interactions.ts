@@ -1,0 +1,273 @@
+"use client";
+
+import { useEffect } from "react";
+
+const THEME_KEY = "apicon-theme";
+
+type ThemeName = "light" | "dark";
+
+function applyTheme(theme: ThemeName): void {
+  const root = document.documentElement;
+  const dark = theme === "dark";
+  if (dark) root.setAttribute("data-theme", "dark");
+  else root.removeAttribute("data-theme");
+
+  document.querySelectorAll<HTMLElement>("#themeIcon, #themeIconMobile").forEach((icon) => {
+    icon.className = dark ? "fa-solid fa-sun theme-icon" : "fa-regular fa-moon theme-icon";
+  });
+}
+
+export function useLegacyInteractions(): void {
+  useEffect(() => {
+    const cleanups: Array<() => void> = [];
+    const listen = <K extends keyof WindowEventMap>(
+      target: Window,
+      type: K,
+      handler: (event: WindowEventMap[K]) => void,
+      options?: AddEventListenerOptions,
+    ): void => {
+      target.addEventListener(type, handler, options);
+      cleanups.push(() => target.removeEventListener(type, handler, options));
+    };
+
+    try {
+      applyTheme(localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light");
+    } catch {
+      applyTheme("light");
+    }
+
+    const onDocumentClick = (event: MouseEvent): void => {
+      const clicked = event.target instanceof Element ? event.target : null;
+      if (!clicked) return;
+
+      const themeToggle = clicked.closest<HTMLElement>("#themeToggle, #themeToggleMobile");
+      if (themeToggle) {
+        const next: ThemeName = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        applyTheme(next);
+        try { localStorage.setItem(THEME_KEY, next); } catch { /* restricted storage */ }
+        return;
+      }
+
+      const navToggle = clicked.closest<HTMLButtonElement>(".navbar-toggler");
+      if (navToggle) {
+        const menu = document.getElementById("mainNavbar");
+        const open = menu?.classList.toggle("show") ?? false;
+        navToggle.setAttribute("aria-expanded", String(open));
+        const icon = navToggle.querySelector<HTMLElement>("i");
+        if (icon) icon.className = open ? "fa-solid fa-xmark nav-toggle-icon" : "fa-solid fa-bars nav-toggle-icon";
+        return;
+      }
+
+      const anchor = clicked.closest<HTMLAnchorElement>('a[href^="#"]');
+      if (anchor) {
+        const selector = anchor.getAttribute("href");
+        if (selector && selector.length > 1) {
+          const target = document.querySelector(selector);
+          if (target) {
+            event.preventDefault();
+            target.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+            document.getElementById("mainNavbar")?.classList.remove("show");
+          }
+        }
+        return;
+      }
+
+      const faqButton = clicked.closest<HTMLButtonElement>(".faq-q");
+      if (faqButton) {
+        const item = faqButton.closest<HTMLElement>(".faq-it");
+        if (!item) return;
+        const wasOpen = item.dataset.state === "open";
+        document.querySelectorAll<HTMLElement>(".faq-it").forEach((entry) => {
+          entry.dataset.state = "closed";
+          entry.classList.remove("open");
+          entry.querySelector<HTMLButtonElement>(".faq-q")?.setAttribute("aria-expanded", "false");
+          const answer = entry.querySelector<HTMLElement>(".faq-a");
+          if (answer) answer.style.height = "0px";
+        });
+        if (!wasOpen) {
+          item.dataset.state = "open";
+          item.classList.add("open");
+          faqButton.setAttribute("aria-expanded", "true");
+          const answer = item.querySelector<HTMLElement>(".faq-a");
+          if (answer) answer.style.height = `${answer.scrollHeight}px`;
+        }
+        return;
+      }
+
+      const partnerTab = clicked.closest<HTMLButtonElement>('[data-partner-tabs] [role="tab"]');
+      if (partnerTab) selectPartnerTab(partnerTab);
+
+      const backToTop = clicked.closest("#backToTop");
+      if (backToTop) window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    };
+    document.addEventListener("click", onDocumentClick);
+    cleanups.push(() => document.removeEventListener("click", onDocumentClick));
+
+    const partnerRoot = document.querySelector<HTMLElement>("[data-partner-tabs]");
+    const partnerTabs = partnerRoot ? Array.from(partnerRoot.querySelectorAll<HTMLButtonElement>('[role="tab"]')) : [];
+    const selectPartnerTab = (selected: HTMLButtonElement): void => {
+      partnerTabs.forEach((tab) => {
+        const active = tab === selected;
+        tab.setAttribute("aria-selected", String(active));
+        tab.tabIndex = active ? 0 : -1;
+        tab.classList.toggle("is-selected", active);
+        const panelId = tab.getAttribute("aria-controls");
+        const panel = panelId ? document.getElementById(panelId) : null;
+        if (panel) panel.hidden = !active;
+      });
+    };
+    if (partnerTabs.length) selectPartnerTab(partnerTabs.find((tab) => tab.getAttribute("aria-selected") === "true") ?? partnerTabs[0]);
+
+    partnerTabs.forEach((tab, index) => {
+      const keydown = (event: KeyboardEvent): void => {
+        let next = index;
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (index + 1) % partnerTabs.length;
+        else if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (index - 1 + partnerTabs.length) % partnerTabs.length;
+        else if (event.key === "Home") next = 0;
+        else if (event.key === "End") next = partnerTabs.length - 1;
+        else return;
+        event.preventDefault();
+        selectPartnerTab(partnerTabs[next]);
+        partnerTabs[next].focus();
+      };
+      tab.addEventListener("keydown", keydown);
+      cleanups.push(() => tab.removeEventListener("keydown", keydown));
+    });
+
+    const nav = document.getElementById("heroNav");
+    const progress = document.getElementById("scrollProgressBar");
+    const backButton = document.getElementById("backToTop");
+    const hero = document.querySelector<HTMLElement>(".hero-bg");
+    const onScroll = (): void => {
+      nav?.classList.toggle("scrolled", Boolean(document.querySelector(".page-header")) || scrollY > 80);
+      if (progress) {
+        const height = document.documentElement.scrollHeight - innerHeight;
+        progress.style.width = `${height > 0 ? (scrollY / height) * 100 : 0}%`;
+      }
+      backButton?.classList.toggle("is-visible", scrollY > 560);
+      if (hero && scrollY < innerHeight && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        hero.style.transform = `scale(1.04) translateY(${scrollY * 0.08}px)`;
+      }
+    };
+    listen(window, "scroll", onScroll, { passive: true });
+    listen(window, "resize", onScroll, { passive: true });
+    onScroll();
+
+    const revealElements = Array.from(document.querySelectorAll<HTMLElement>(".reveal, .feat-grid .feat, .team-card"));
+    if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          (entry.target as HTMLElement).classList.add("active");
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -30px 0px" });
+      revealElements.forEach((element) => observer.observe(element));
+      cleanups.push(() => observer.disconnect());
+    } else revealElements.forEach((element) => element.classList.add("active"));
+
+    const band = document.querySelector<HTMLElement>(".stats-band");
+    if (band && "IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const counters = Array.from(band.querySelectorAll<HTMLElement>("[data-count]"));
+      counters.forEach((counter) => { counter.textContent = `${counter.dataset.prefix ?? ""}0${counter.dataset.suffix ?? ""}`; });
+      const observer = new IntersectionObserver(([entry]) => {
+        if (!entry?.isIntersecting) return;
+        counters.forEach((counter) => animateCounter(counter));
+        observer.disconnect();
+      }, { threshold: 0.35 });
+      observer.observe(band);
+      cleanups.push(() => observer.disconnect());
+    }
+
+    setupTeamCarousel(cleanups);
+    setupPointerEffects(cleanups);
+
+    return () => cleanups.reverse().forEach((cleanup) => cleanup());
+  }, []);
+}
+
+function animateCounter(counter: HTMLElement): void {
+  const target = Number(counter.dataset.count ?? 0);
+  const prefix = counter.dataset.prefix ?? "";
+  const suffix = counter.dataset.suffix ?? "";
+  const start = performance.now();
+  const frame = (now: number): void => {
+    const progress = Math.min((now - start) / 1400, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    counter.textContent = `${prefix}${Math.round(target * eased)}${suffix}`;
+    if (progress < 1) requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+}
+
+function setupTeamCarousel(cleanups: Array<() => void>): void {
+  const grid = document.getElementById("teamGrid");
+  const dots = document.getElementById("teamDots");
+  const previous = document.getElementById("teamPrev") as HTMLButtonElement | null;
+  const next = document.getElementById("teamNext") as HTMLButtonElement | null;
+  if (!grid || !dots || !previous || !next) return;
+  const cards = Array.from(grid.querySelectorAll<HTMLElement>(".team-card"));
+  let index = 0;
+  const goTo = (nextIndex: number): void => {
+    if (innerWidth > 768) return;
+    index = Math.max(0, Math.min(cards.length - 1, nextIndex));
+    grid.scrollTo({ left: cards[index].offsetLeft - grid.offsetLeft, behavior: "smooth" });
+    Array.from(dots.children).forEach((dot, dotIndex) => dot.classList.toggle("active", dotIndex === index));
+    previous.disabled = index === 0;
+    next.disabled = index === cards.length - 1;
+  };
+  cards.forEach((_, dotIndex) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.setAttribute("aria-label", `Show team member ${dotIndex + 1}`);
+    dot.classList.toggle("active", dotIndex === 0);
+    const click = (): void => goTo(dotIndex);
+    dot.addEventListener("click", click);
+    cleanups.push(() => dot.removeEventListener("click", click));
+    dots.appendChild(dot);
+  });
+  const previousClick = (): void => goTo(index - 1);
+  const nextClick = (): void => goTo(index + 1);
+  previous.addEventListener("click", previousClick);
+  next.addEventListener("click", nextClick);
+  cleanups.push(() => previous.removeEventListener("click", previousClick));
+  cleanups.push(() => next.removeEventListener("click", nextClick));
+  goTo(0);
+}
+
+function setupPointerEffects(cleanups: Array<() => void>): void {
+  if (!matchMedia("(pointer:fine)").matches || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  document.body.classList.add("has-pointer");
+  const dot = document.createElement("span");
+  const ring = document.createElement("span");
+  dot.id = "apiCursor";
+  ring.id = "apiCursorRing";
+  document.body.append(dot, ring);
+  let frame = 0;
+  let mouseX = 0;
+  let mouseY = 0;
+  let ringX = 0;
+  let ringY = 0;
+  const pointerMove = (event: PointerEvent): void => {
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+    dot.style.left = `${mouseX}px`;
+    dot.style.top = `${mouseY}px`;
+  };
+  window.addEventListener("pointermove", pointerMove);
+  const follow = (): void => {
+    ringX += (mouseX - ringX) * 0.16;
+    ringY += (mouseY - ringY) * 0.16;
+    ring.style.left = `${ringX}px`;
+    ring.style.top = `${ringY}px`;
+    frame = requestAnimationFrame(follow);
+  };
+  follow();
+  cleanups.push(() => {
+    window.removeEventListener("pointermove", pointerMove);
+    cancelAnimationFrame(frame);
+    dot.remove();
+    ring.remove();
+    document.body.classList.remove("has-pointer");
+  });
+}

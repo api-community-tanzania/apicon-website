@@ -1,0 +1,72 @@
+# APICon Tanzania
+
+> APICon Tanzania is a community-driven API ecosystem initiative focused on API Development, API Security, DevSecOps, API discovery, developer platforms, and API-driven innovation.
+
+## APICon Tanzania 2026
+
+- Theme: Secure APIs. Build the Future.
+- Date: 21 November 2026
+- Time: 08:00 - 17:30
+- Date and location: Saturday 21 November 2026, Dar es Salaam, Tanzania
+- Expected attendance: 150+ participants
+- Website: https://apicon.or.tz/
+
+## Conference Focus
+
+APICon Tanzania 2026 brings together software developers and engineers, cybersecurity professionals, university students and emerging talent, startups and founders, FinTech, banking and payment organizations, AI and technology companies, API providers, and other relevant industry participants.
+
+The conference focuses on practical API learning, API security, DevSecOps, developer experience, API-driven innovation, technology discovery, and industry engagement.
+
+## API Marketplace & Innovation Hub
+
+The API Marketplace & Innovation Hub is a physical discovery and showcase area where relevant organizations can demonstrate APIs, SDKs, developer platforms, cybersecurity solutions, AI services, integrations, and API-enabled products.
+
+
+## Vision
+
+To build a strong and secure API ecosystem in Tanzania where developers and API providers can learn, connect, discover, and create digital solutions.
+
+## Mission
+
+To advance practical API knowledge, API security, DevSecOps, and API discovery by connecting developers with organizations, technologies, and real-world integration opportunities.
+
+## Core Topics
+
+- API Fundamentals & Architecture
+- API Security
+- Authentication & Identity
+- DevSecOps & Secure SDLC
+- API Platforms & Developer Experience
+- FinTech & Digital Payments APIs
+- AI, Agents & APIs
+- Model Context Protocol (MCP)
+- Real-World API Incidents & Demonstrations
+
+## Contact
+
+- General Support: support@apicon.or.tz
+- Partnerships & Exhibitors: partnerships@apicon.or.tz
+- Speaking: speakers@apicon.or.tz
+- Phone: +255 745 289 098
+
+## Official Social Channels
+
+- LinkedIn: https://www.linkedin.com/company/apicontz
+- Instagram: https://www.instagram.com/apicontz
+- X: https://www.x.com/apicontz
+- WhatsApp Channel: https://whatsapp.com/channel/0029Vb8TF2KEawdhUjE7uR3k
+- WhatsApp Community: https://chat.whatsapp.com/HdPOT43wZRk4ypGPoKEymU?s=cl&p=i&ilr=2
+
+## AI-Era API Challenges
+
+APICon Tanzania 2026 addresses AI-era API topics as program themes and engineering challenges, including:
+
+- APIs as tools used by AI agents
+- Model Context Protocol (MCP) servers, clients and integration patterns
+- Interoperability and reliable tool discovery
+- Scoped permissions, authentication and authorization for agent actions
+- Prompt injection, data exposure and AI/API threat modeling
+- Governance, auditability and human oversight
+- Observability across agents, tools, models and APIs
+
+These are topics the conference addresses; they are not claims about confirmed speakers or sessions.

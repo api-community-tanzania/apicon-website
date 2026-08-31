@@ -1,0 +1,35 @@
+import type { Metadata } from "next";
+import { LegacyPage } from "@/components/legacy-page";
+import { StructuredData } from "@/components/structured-data";
+import { teamMarkup } from "@/lib/legacy-content";
+import { homeStructuredData } from "@/lib/structured-data";
+
+export const metadata: Metadata = {
+  title: "Our Team | APICon Tanzania 2026",
+  description: "APICon Tanzania 2026 brings together developers, cybersecurity professionals, startups, technology companies, students and API providers to learn, showcase, discover and secure APIs. Saturday 21 November 2026, Dar es Salaam, Tanzania.",
+  alternates: { canonical: "/team", languages: { en: "/", "x-default": "/" } },
+  openGraph: {
+    type: "website",
+    title: "APICon Tanzania 2026 | API Development, API Security & Innovation",
+    description: "Learn, discover, showcase and secure APIs at APICon Tanzania 2026. Join developers, cybersecurity professionals, startups, technology companies, students and API providers on Saturday 21 November 2026 in Dar es Salaam, Tanzania.",
+    url: "/",
+    siteName: "APICon Tanzania 2026",
+    locale: "en_TZ",
+    images: [{ url: "/assets/images/og-image.png", width: 1200, height: 630, alt: "APICon Tanzania 2026 — API Development, API Security & Innovation Conference in Dar es Salaam" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "APICon Tanzania 2026 | API Development, API Security & Innovation",
+    description: "Learn, discover, showcase and secure APIs at APICon Tanzania 2026 on Saturday 21 November 2026 in Dar es Salaam, Tanzania.",
+    images: ["/assets/images/og-image.png"],
+  },
+};
+
+export default function TeamPage() {
+  return (
+    <>
+      <StructuredData entries={homeStructuredData} />
+      <LegacyPage markup={teamMarkup} bodyClassName="team-page" />
+    </>
+  );
+}
