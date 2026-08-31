@@ -1488,3 +1488,166 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid 
 #partners .sponsor-logo-slot:empty::after{
   content:"";
 }
+
+/* Participation model chooser */
+#partners .model-grid article[data-participation-model]{
+  cursor:pointer;
+}
+#partners .model-grid article[data-participation-model]::after{
+  content:"View Free & Premium options";
+  display:block;
+  margin-top:16px;
+  color:var(--teal);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.045em;
+  text-transform:uppercase;
+}
+#partners .model-grid article[data-participation-model]:focus-visible{
+  outline:3px solid var(--teal);
+  outline-offset:4px;
+}
+#partners .partner-selector{
+  margin-top:clamp(42px,6vw,72px);
+}
+#partners .partner-panel--premium{
+  display:block;
+}
+.participation-dialog-open{
+  overflow:hidden;
+}
+.participation-modal[hidden]{
+  display:none;
+}
+.participation-modal{
+  position:fixed;
+  inset:0;
+  z-index:10050;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  opacity:0;
+  transition:opacity .24s ease;
+}
+.participation-modal.is-open{
+  opacity:1;
+}
+.participation-modal__backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(4,8,17,.76);
+  backdrop-filter:blur(9px);
+}
+.participation-modal__card{
+  position:relative;
+  z-index:1;
+  width:min(880px,100%);
+  max-height:min(780px,calc(100dvh - 40px));
+  overflow:auto;
+  padding:clamp(28px,5vw,52px);
+  border:1px solid var(--card-border);
+  border-radius:26px;
+  background:var(--card-bg);
+  color:var(--text);
+  box-shadow:0 34px 100px rgba(0,0,0,.38);
+  transform:translateY(16px) scale(.98);
+  transition:transform .28s cubic-bezier(.2,.8,.2,1);
+}
+.participation-modal.is-open .participation-modal__card{
+  transform:none;
+}
+.participation-modal__close{
+  position:absolute;
+  top:16px;
+  right:16px;
+  display:grid;
+  place-items:center;
+  width:42px;
+  height:42px;
+  border:1px solid var(--card-border);
+  border-radius:50%;
+  background:var(--bg2);
+  color:var(--text);
+  font-size:27px;
+  line-height:1;
+  cursor:pointer;
+}
+.participation-modal__close:focus-visible{
+  outline:3px solid var(--teal);
+  outline-offset:3px;
+}
+.participation-modal__eyebrow{
+  margin:0 0 8px;
+  color:var(--teal);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.participation-modal__card>h3{
+  margin:0;
+  padding-right:44px;
+  color:var(--navy);
+  font:800 clamp(28px,5vw,45px)/1.08 'Space Grotesk',sans-serif;
+}
+.participation-modal__intro{
+  max-width:680px;
+  margin:14px 0 28px;
+  color:var(--muted);
+  line-height:1.7;
+}
+.participation-modal__options{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+}
+.participation-option{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  min-width:0;
+  padding:26px;
+  border:1px solid var(--card-border);
+  border-radius:20px;
+  background:var(--bg2);
+}
+.participation-option--premium{
+  border-color:color-mix(in srgb,var(--teal) 45%,var(--card-border));
+  background:linear-gradient(145deg,color-mix(in srgb,var(--teal) 10%,var(--card-bg)),var(--card-bg));
+}
+.participation-option__badge{
+  display:inline-flex;
+  margin-bottom:17px;
+  padding:7px 11px;
+  border-radius:999px;
+  background:color-mix(in srgb,var(--teal) 14%,transparent);
+  color:var(--teal);
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.participation-option h4{
+  margin:0 0 10px;
+  color:var(--navy);
+  font:800 21px/1.2 'Space Grotesk',sans-serif;
+}
+.participation-option p{
+  flex:1;
+  margin:0 0 24px;
+  color:var(--muted);
+  line-height:1.65;
+}
+.participation-option .btn{
+  width:100%;
+  text-align:center;
+}
+@media(max-width:680px){
+  .participation-modal{padding:12px}
+  .participation-modal__card{max-height:calc(100dvh - 24px);padding:30px 18px 20px;border-radius:20px}
+  .participation-modal__options{grid-template-columns:1fr}
+  .participation-option{padding:21px}
+}
+@media(prefers-reduced-motion:reduce){
+  .participation-modal,.participation-modal__card{transition:none}
+}

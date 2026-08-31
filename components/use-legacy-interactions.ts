@@ -43,9 +43,51 @@ export function useLegacyInteractions(markup: string): void {
       applyTheme("light");
     }
 
+    const participationDialog = document.getElementById("participationModelDialog");
+    const participationTitle = participationDialog?.querySelector<HTMLElement>("[data-participation-title]");
+    let participationTrigger: HTMLElement | null = null;
+
+    const closeParticipationDialog = (): void => {
+      if (!participationDialog || participationDialog.hidden) return;
+      participationDialog.hidden = true;
+      participationDialog.classList.remove("is-open");
+      document.body.classList.remove("participation-dialog-open");
+      participationTrigger?.focus();
+      participationTrigger = null;
+    };
+
+    const openParticipationDialog = (trigger: HTMLElement): void => {
+      if (!participationDialog || !participationTitle) return;
+      participationTrigger = trigger;
+      const modelName = trigger.dataset.participationModel ?? "Participation Model";
+      participationTitle.textContent = modelName;
+      const freeLink = participationDialog.querySelector<HTMLAnchorElement>(".participation-option--free a");
+      const premiumLink = participationDialog.querySelector<HTMLAnchorElement>(".participation-option--premium a");
+      if (freeLink) freeLink.href = `mailto:partnerships@apicon.or.tz?subject=${encodeURIComponent(`APICon ${modelName} — Free Participation`)}`;
+      if (premiumLink) premiumLink.href = `mailto:partnerships@apicon.or.tz?subject=${encodeURIComponent(`APICon ${modelName} — Premium Partnership`)}`;
+      participationDialog.hidden = false;
+      document.body.classList.add("participation-dialog-open");
+      requestAnimationFrame(() => {
+        participationDialog.classList.add("is-open");
+        participationDialog.querySelector<HTMLButtonElement>(".participation-modal__close")?.focus();
+      });
+    };
+
     const onDocumentClick = (event: MouseEvent): void => {
       const clicked = event.target instanceof Element ? event.target : null;
       if (!clicked) return;
+
+      const participationClose = clicked.closest<HTMLElement>("[data-participation-close]");
+      if (participationClose) {
+        closeParticipationDialog();
+        return;
+      }
+
+      const participationCard = clicked.closest<HTMLElement>("[data-participation-model]");
+      if (participationCard) {
+        openParticipationDialog(participationCard);
+        return;
+      }
 
       const themeToggle = clicked.closest<HTMLElement>("#themeToggle, #themeToggleMobile");
       if (themeToggle) {
@@ -113,6 +155,21 @@ export function useLegacyInteractions(markup: string): void {
     };
     document.addEventListener("click", onDocumentClick);
     cleanups.push(() => document.removeEventListener("click", onDocumentClick));
+
+    const onParticipationKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === "Escape") {
+        closeParticipationDialog();
+        return;
+      }
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const target = event.target instanceof HTMLElement ? event.target.closest<HTMLElement>("[data-participation-model]") : null;
+      if (!target) return;
+      event.preventDefault();
+      openParticipationDialog(target);
+    };
+    document.addEventListener("keydown", onParticipationKeyDown);
+    cleanups.push(() => document.removeEventListener("keydown", onParticipationKeyDown));
+    cleanups.push(() => document.body.classList.remove("participation-dialog-open"));
 
     const partnerRoot = document.querySelector<HTMLElement>("[data-partner-tabs]");
     const partnerTabs = partnerRoot ? Array.from(partnerRoot.querySelectorAll<HTMLButtonElement>('[role="tab"]')) : [];
