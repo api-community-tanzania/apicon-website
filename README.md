@@ -68,7 +68,7 @@ apicon-website/
 │   ├── robots.txt
 │   ├── sitemap.xml
 │   └── llms.txt
-└── next.config.ts          # Redirects and Next.js configuration
+└── next.config.mjs          # Redirects and Next.js configuration
 ```
 
 ---
@@ -123,15 +123,43 @@ npm run lint
 
 ## Deployment
 
-This project is designed to deploy on [Vercel](https://vercel.com) or any platform that supports Next.js.
+No environment variables are required for the public site.
 
-Recommended steps:
+### Vercel (recommended)
 
-1. Connect the repository to your hosting provider
+1. Connect the repository to [Vercel](https://vercel.com)
 2. Set the production domain to `apicon.or.tz`
 3. Deploy from the `main` branch
 
-No environment variables are required for the public site.
+### Hostinger (Node.js Web App)
+
+Hostinger’s build servers run an older Linux (glibc), so this project uses `next.config.mjs` (plain JavaScript) and the SWC WASM fallback instead of the native SWC binary.
+
+In **hPanel → Websites → Node.js Web App**, use:
+
+| Setting | Value |
+| --- | --- |
+| Node.js version | **20.x** |
+| Install command | `npm install` |
+| Build command | `npm run build` |
+| Start command | `npm run start` |
+| App port | Use the port Hostinger assigns (usually via `PORT`) |
+
+Push these changes, then redeploy. You may see a warning about `@next/swc-linux-x64-gnu` and GLIBC — that is expected; Next.js falls back to WASM and the build should continue.
+
+If the build still fails on Hostinger, build locally and upload the output instead:
+
+```bash
+npm install
+npm run build
+```
+
+Then upload the `.next` folder, `public/`, `package.json`, and `package-lock.json`, and run `npm install --omit=dev && npm start` on the server.
+
+### Notes
+
+- The ESLint deprecation warning during `npm install` is harmless and does not block deployment.
+- Do **not** use `npm install --no-optional` — Next.js needs optional SWC packages for Linux builds.
 
 ---
 
