@@ -1475,3 +1475,16 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid 
     border-top-color:rgba(45,212,232,.16);
   }
 }
+
+/* Premium tier cards: consistent header separator with silent future logo slots. */
+#partners .sponsor-tier-card__header{
+  padding-bottom:20px;
+  border-bottom:1px solid color-mix(in srgb,var(--tier-deep) 25%,transparent);
+}
+#partners .sponsor-logo-gallery{
+  padding-top:20px;
+  border-top:0;
+}
+#partners .sponsor-logo-slot:empty::after{
+  content:"";
+}
