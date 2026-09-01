@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { LegacyPage } from "@/components/legacy-page";
 import { StructuredData } from "@/components/structured-data";
 import { homeMarkup } from "@/lib/legacy-content";
@@ -32,6 +33,7 @@ export default function HomePage() {
     <>
       <StructuredData entries={homeStructuredData} />
       <LegacyPage markup={homeMarkup} />
+      <Script id="luma-checkout" src="https://embed.lu.ma/checkout-button.js" strategy="afterInteractive" />
     </>
   );
 }

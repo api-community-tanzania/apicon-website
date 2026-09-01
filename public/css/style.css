@@ -109,6 +109,7 @@ button,input,textarea,select{font-family:inherit}
 .hero-btns .btn-common{background:var(--teal);color:#fff;border:none;border-radius:30px;padding:12px 28px;font-weight:600;transition:.3s}
 .hero-btns .btn-common:hover{background:var(--ink,var(--navy));color:#fff}
 .hero-btns .disabled-btn,.hero-btns .disabled-btn:hover{opacity:.65;cursor:not-allowed;background:var(--teal);color:#fff;box-shadow:none;transform:none}
+.hero-btns .luma-checkout--button{text-decoration:none}
 .hero-btns .btn-border{background:transparent;color:#fff;border:2px solid #fff;border-radius:30px;padding:10px 28px;font-weight:600;transition:.3s}
 .hero-btns .btn-border:hover{background:var(--teal);border-color:var(--teal);color:#fff}
 .hero-control-prev,.hero-control-next{width:60px;opacity:.7}
@@ -366,6 +367,8 @@ button,input,textarea,select{font-family:inherit}
 .faq-it.open .faq-ico{background:var(--pink);border-color:var(--pink);color:#fff;transform:rotate(45deg)}
 .faq-a{height:0;overflow:hidden;transition:height .4s cubic-bezier(.22,.61,.36,1)}
 .faq-a-in{padding-bottom:20px;font-size:16px;line-height:1.85;color:var(--muted)}
+.faq-a-in .faq-link{color:var(--teal);text-decoration:underline;text-underline-offset:3px;font-weight:600}
+.faq-a-in .faq-link:hover{color:var(--teal2)}
 
 /* ── PRICING ── */
 .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
