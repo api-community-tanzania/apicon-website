@@ -171,6 +171,7 @@ Then upload the `.next` folder, `public/`, `package.json`, and `package-lock.jso
 | --- | --- |
 | General support | [support@apicon.or.tz](mailto:support@apicon.or.tz) |
 | Partnerships & exhibitors | [partnerships@apicon.or.tz](mailto:partnerships@apicon.or.tz) |
+| Sponsorships | [sponsorships@apicon.or.tz](mailto:sponsorships@apicon.or.tz) |
 | Speaking | [speakers@apicon.or.tz](mailto:speakers@apicon.or.tz) |
 
 **Phone:** +255 745 289 098

@@ -112,7 +112,8 @@ export function useLegacyInteractions(markup: string): void {
         }
         const link = participationDialog.querySelector<HTMLAnchorElement>(`[data-participation-contact="${type}"]`);
         const label = type === "addons" ? "Optional Add-ons" : type[0].toUpperCase() + type.slice(1);
-        if (link) link.href = `mailto:partnerships@apicon.or.tz?subject=${encodeURIComponent(`APICon ${modelName} — ${label}`)}`;
+        const email = type === "freemium" ? "partnerships@apicon.or.tz" : "sponsorships@apicon.or.tz";
+        if (link) link.href = `mailto:${email}?subject=${encodeURIComponent(`APICon ${modelName} — ${label}`)}`;
       });
       participationDialog.hidden = false;
       document.body.classList.add("participation-dialog-open");
