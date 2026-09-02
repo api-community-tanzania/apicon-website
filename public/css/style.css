@@ -1710,3 +1710,47 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid 
   color:rgba(45,212,232,.16);
 }
 
+
+
+/* Concise sponsorship highlights; tier color treatments remain unchanged. */
+.sponsor-tier-card__highlights{padding:20px 0 2px}
+.sponsor-tier-card__summary{margin:0 0 15px;color:var(--tier-ink);font-size:14px;font-weight:700;line-height:1.55}
+.sponsor-tier-card__lead{margin:0 0 9px;color:var(--tier-deep);font-size:12px;font-weight:800}
+.sponsor-tier-card__highlights ul{margin:0;padding:0;list-style:none}
+.sponsor-tier-card__highlights li{position:relative;padding:8px 0 8px 23px;border-bottom:1px solid color-mix(in srgb,var(--tier-deep) 17%,transparent);font-size:13px;line-height:1.4}
+.sponsor-tier-card__highlights li::before{content:"check";position:absolute;left:0;top:9px;color:var(--tier-deep);font:700 14px/1 'Material Symbols Outlined'}
+.sponsor-tier-card__highlights li:last-child{border-bottom:0}
+
+/* Model-specific premium participation fee. */
+.participation-option__price{
+  width:100%;
+  margin:0 0 16px!important;
+  padding:12px 14px;
+  border:1px solid color-mix(in srgb,var(--teal) 32%,var(--card-border));
+  border-radius:12px;
+  background:color-mix(in srgb,var(--teal) 9%,var(--card-bg));
+  color:var(--navy)!important;
+  font:800 20px/1.2 'Space Grotesk',sans-serif;
+  letter-spacing:.01em;
+}
+
+/* Make the premium fee immediately scannable in light and dark themes. */
+.participation-option__price{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  padding:16px 18px;
+  border:0;
+  background:linear-gradient(135deg,var(--teal),var(--teal2));
+  color:#07111b!important;
+  font-size:clamp(23px,3vw,29px);
+  box-shadow:0 10px 26px rgba(7,163,177,.25);
+}
+.participation-option__price::before{
+  content:"Premium fee";
+  color:#07111b;
+  font:800 10px/1 'Inter',sans-serif;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  opacity:.76;
+}
