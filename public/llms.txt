@@ -8,7 +8,7 @@
 - Date: 21 November 2026
 - Time: 08:00 - 17:30
 - Date and location: Saturday 21 November 2026, Dar es Salaam, Tanzania
-- Expected attendance: 150+ participants
+- Expected attendance: 100+ participants
 - Website: https://apicon.or.tz/
 
 ## Conference Focus
