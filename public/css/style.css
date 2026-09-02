@@ -5,7 +5,7 @@
 :root{
   color-scheme: light;
   --navy:#101427;--navy2:#181f38;--navy3:#0d1020;
-  --teal:#07a3b1;--teal2:#09bccb;
+  --teal:#07a3b1;--teal2:#09bccb;--orange:#d95f02;
   --pink:#07a3b1;--pink2:#09bccb;
   --white:#ffffff;--off:#f5f7ff;
   --black:#080c17;--muted:#7a8499;
@@ -23,7 +23,7 @@
 [data-theme="dark"]{
   color-scheme: dark;
   --navy:#e8edf5;--navy2:#0f1325;--navy3:#0a0d1a;
-  --teal:#2dd4e8;--teal2:#4de3f5;
+  --teal:#2dd4e8;--teal2:#4de3f5;--orange:#fb923c;
   --pink:#2dd4e8;--pink2:#4de3f5;
   --white:#0d1020;--off:#121626;
   --black:#f0f4ff;--muted:#9ca3b8;
@@ -1654,3 +1654,59 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid 
 @media(prefers-reduced-motion:reduce){
   .participation-modal,.participation-modal__card{transition:none}
 }
+
+/* Model-specific partnership benefit cards */
+.participation-modal__card{width:min(1180px,100%)}
+.participation-modal__options{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}
+.participation-option--addons{border-color:color-mix(in srgb,var(--orange) 38%,var(--card-border));background:linear-gradient(145deg,color-mix(in srgb,var(--orange) 7%,var(--card-bg)),var(--card-bg))}
+.participation-option--addons .participation-option__badge{background:color-mix(in srgb,var(--orange) 14%,transparent);color:var(--orange)}
+.participation-option__lead{flex:none!important;margin:0 0 13px!important;font-weight:700}
+.participation-option ul{flex:1;width:100%;margin:0 0 24px;padding:0;list-style:none}
+.participation-option li{position:relative;padding:8px 0 8px 25px;border-bottom:1px solid color-mix(in srgb,var(--card-border) 72%,transparent);color:var(--muted);font-size:14px;line-height:1.45}
+.participation-option li::before{content:"check";position:absolute;left:0;top:8px;color:var(--teal);font:700 16px/1 'Material Symbols Outlined'}
+.participation-option--addons li::before{color:var(--orange)}
+.participation-option li:last-child{border-bottom:0}
+@media(max-width:960px){.participation-modal__options{grid-template-columns:1fr 1fr}.participation-option--addons{grid-column:1/-1}}
+@media(max-width:680px){.participation-modal__options{grid-template-columns:1fr}.participation-option--addons{grid-column:auto}.participation-option li{font-size:13px}}
+
+/* Keep outlined partnership CTAs legible in every theme and interaction state. */
+.participation-option .btn-border-dark{
+  background:transparent;
+  border-color:var(--teal);
+  color:var(--teal);
+  transition:color .22s ease,background .22s ease,border-color .22s ease,transform .22s ease,box-shadow .22s ease;
+}
+.participation-option .btn-border-dark:hover,
+.participation-option .btn-border-dark:focus-visible{
+  background:var(--teal);
+  border-color:var(--teal);
+  color:#fff;
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(7,163,177,.28);
+}
+.participation-option--addons .btn-border-dark:hover,
+.participation-option--addons .btn-border-dark:focus-visible{
+  background:var(--orange);
+  border-color:var(--orange);
+  color:#fff;
+  box-shadow:0 8px 24px color-mix(in srgb,var(--orange) 30%,transparent);
+}
+
+/* Number participation paths consistently with the Value Proposition cards. */
+#partners .model-grid article[data-participation-model]{
+  position:relative;
+  padding-top:54px;
+  overflow:hidden;
+}
+#partners .participation-model__number{
+  position:absolute;
+  top:16px;
+  right:18px;
+  color:rgba(7,163,177,.13);
+  font:800 38px/1 'Space Grotesk',sans-serif;
+  pointer-events:none;
+}
+[data-theme="dark"] #partners .participation-model__number{
+  color:rgba(45,212,232,.16);
+}
+
